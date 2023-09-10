@@ -1,0 +1,10 @@
+- name: "[Firewall] Configure complimentary features"
+  hosts: firewall
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+
+  roles:
+    - role: mrlesmithjr.frr
+    - role: kea
+    #- role: dns
