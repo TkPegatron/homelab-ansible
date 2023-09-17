@@ -1,4 +1,4 @@
 ---
-nftables_nic_wan: enp8s0
-nftables_nic_lan: enp7s0
-nftables_nic_man: enp1s0
+nftables_nic_wan: eno3
+nftables_nic_lan: vm-br-vl20
+nftables_nic_man: vm-br-vl10

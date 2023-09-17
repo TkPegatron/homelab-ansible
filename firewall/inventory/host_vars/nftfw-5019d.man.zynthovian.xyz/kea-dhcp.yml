@@ -57,8 +57,8 @@ kea_dhcp4_config:
                 this-server-name: nftfw-5019d
     interfaces-config:
         interfaces:
-        - enp1s0
-        - enp7s0
+        - vm-br-vl10
+        - vm-br-vl20
     lease-database:
         type: memfile
     loggers:
@@ -72,7 +72,7 @@ kea_dhcp4_config:
     rebind-timer: 32400
     renew-timer: 21600
     subnet4:
-    -   interface: enp1s0
+    -   interface: vm-br-vl10
         option-data:
         -   data: 172.22.0.1
             name: routers
@@ -100,7 +100,7 @@ kea_dhcp4_config:
             hw-address: b8:85:84:a2:e7:bb
             ip-address: 172.22.0.12
         subnet: 172.22.0.0/25
-    -   interface: enp7s0
+    -   interface: vm-br-vl20
         option-data:
         -   data: 172.22.1.1
             name: routers

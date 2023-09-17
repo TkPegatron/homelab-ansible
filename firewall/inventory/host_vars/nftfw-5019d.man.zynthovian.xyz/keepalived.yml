@@ -9,8 +9,8 @@ keepalived_instances:
     unicast_peers:
       - 172.22.0.119
     vips:
-      - 172.22.0.1/25 dev enp1s0
-      - 172.22.1.1/25 dev enp7s0
+      - 172.22.0.1/25 dev vm-br-vl10
+      - 172.22.1.1/25 dev vm-br-vl20
     track_interfaces:
-      - enp1s0
-      - enp7s0
+      - vm-br-vl10
+      - vm-br-vl20
