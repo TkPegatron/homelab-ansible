@@ -2,3 +2,4 @@
 nftables_nic_wan: eno3
 nftables_nic_lan: vm-br-vl20
 nftables_nic_man: vm-br-vl10
+nftables_nic_vpn: wg0

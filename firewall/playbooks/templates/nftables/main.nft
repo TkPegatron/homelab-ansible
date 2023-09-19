@@ -7,6 +7,7 @@ flush ruleset
 define nic_wan = {{ nftables_nic_wan }}
 define nic_lan = {{ nftables_nic_lan }}
 define nic_man = {{ nftables_nic_man }}
+define nic_vpn = {{ nftables_nic_vpn }}
 
 table inet primary {
 
@@ -107,7 +108,9 @@ table inet primary {
             $nic_man . $nic_wan, # MAN -> WAN; allow
             $nic_lan . $nic_wan, # LAN -> WAN; allow
             $nic_man . $nic_lan, # MAN -> LAN; allow
-            $nic_lan . $nic_man  # LAN -> MAN; allow
+            $nic_lan . $nic_man, # LAN -> MAN; allow
+            $nic_vpn . $nic_lan, # VPN -> LAN; allow
+            $nic_vpn . $nic_man  # VPN -> MAN; allow
         } accept
         # -{Final Verdict of incoming connections}
         ct state new counter log prefix "nft.primary.forward.dispatch.reject " reject with icmpx type admin-prohibited
