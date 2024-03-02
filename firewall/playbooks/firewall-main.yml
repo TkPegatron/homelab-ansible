@@ -12,8 +12,7 @@
     - name: Add nftables configuration to variable
       ansible.builtin.set_fact:
         nftables_rules_raw:
-          "{{ lookup('template', 'nftables/main.nft') }}"
-
+          "{{ lookup('template', 'nftables/new_main.nft') }}"
   post_tasks:
 
     - name: Configure rsyslog to intercept nftables kernel logs

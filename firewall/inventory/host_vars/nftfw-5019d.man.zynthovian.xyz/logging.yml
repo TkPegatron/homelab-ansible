@@ -6,21 +6,29 @@ logrotate_applications:
     definitions:
       - logs:
           - /var/log/nftables.log
+          - /var/log/unbound.log
         options:
-          - rotate 5
-          - daily
-          - maxsize 100M
           - missingok
-          - notifempty
-          - delaycompress
-          - compress
+          - sharedscripts
+        postrotate:
+          - /usr/bin/systemctl -s HUP kill rsyslog.service >/dev/null 2>&1 || true
 
 # Variables for rsyslog task
 
 rsyslog_rsyslog_d_files:
   - name: nftables
     content: |
-      :msg, regex, "^nftables\." {
+      $PreserveFQDN on
+      :msg, regex, "^nft\." {
+          action(type="omfwd" target="172.21.0.3" port="10514" protocol="tcp")
           action(type="omfile" file="/var/log/nftables.log")
+          stop
+      }
+  - name: unbound
+    content: |
+      if $programname == 'unbound' then {
+          $PreserveFQDN on
+          action(type="omfwd" target="172.21.0.3" port="10514" protocol="tcp")
+          action(type="omfile" file="/var/log/unbound.log")
           stop
       }
