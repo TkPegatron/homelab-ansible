@@ -1,0 +1,4 @@
+[Service]
+{% for interface in kea_dhcp4_config['interfaces-config'].interfaces %}
+ExecStartPre=/bin/bash -c '(while ! (ip link show {{ interface }} | grep -q "state UP"); do echo "Waiting for {{ interface }}..." && sleep 1; done);'
+{% endfor %}

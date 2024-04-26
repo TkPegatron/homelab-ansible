@@ -10,6 +10,23 @@
     # mode: 0644
   notify: Restart kea dhcp4 server
 
+- name: Ensure service override directory is present
+  ansible.builtin.file:
+    path: /etc/systemd/system/kea-dhcp4.service.d/
+    owner: root
+    group: root
+    mode: "0755"
+    state: directory
+
+- name: Deploy override
+  ansible.builtin.template:
+    src: dhcpx-override.j2
+    dest: /etc/systemd/system/kea-dhcp4.service.d/ansible-override.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: daemon-reload
+
 - name: Start and Enable kea dhcp4 service
   ansible.builtin.service:
     name: kea-dhcp4.service

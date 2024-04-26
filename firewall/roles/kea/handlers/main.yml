@@ -1,4 +1,9 @@
 ---
+- name: Reload daemon
+  listen: daemon-reload
+  ansible.builtin.systemd:
+    daemon_reload: true
+
 - name: Restart kea dhcp4 server
   ansible.builtin.service:
     name: kea-dhcp4.service
