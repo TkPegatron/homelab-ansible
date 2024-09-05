@@ -1,0 +1,26 @@
+interface vm-br-vl10 {
+    AdvSendAdvert on;
+    MaxRtrAdvInterval 600;
+    MinRtrAdvInterval 200;
+    AdvManagedFlag on;
+    AdvOtherConfigFlag on;
+    prefix fd4e:df98:5835:4f08::/64 {
+        AdvOnLink on;
+        AdvAutonomous on;
+        AdvRouterAddr on;
+    };
+};
+
+interface vm-br-vl20 {
+    AdvSendAdvert on;
+    MaxRtrAdvInterval 600;
+    MinRtrAdvInterval 200;
+    AdvManagedFlag on;
+    AdvOtherConfigFlag on;
+    prefix fd4e:df98:5835:25c2::/64 {
+        AdvOnLink on;
+        AdvAutonomous on;
+        AdvRouterAddr on;
+    };
+};
+

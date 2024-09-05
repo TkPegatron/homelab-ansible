@@ -1,0 +1,30 @@
+# Install RADVD
+# Deploy configuration template
+# Restart radvd
+
+---
+- name: Spool in package management tasks
+  ansible.builtin.import_tasks: package-management.yml
+
+- name: Configure kea dhcp4
+  ansible.builtin.template:
+    src: config.conf.j2
+    dest: /etc/radvd.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart-radvd
+
+- name: Start and Enable the Router Advertisement daemon
+  ansible.builtin.service:
+    name: radvd.service
+    state: started
+    enabled: true
+
+- name: Append controlled files fact
+  ansible.builtin.set_fact:
+    controlled_files: "{{
+        controlled_files | default([]) + [
+          '/etc/radvd.conf',
+        ]
+      }}"

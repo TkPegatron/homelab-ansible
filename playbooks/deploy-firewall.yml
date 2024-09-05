@@ -1,0 +1,38 @@
+- name: "-{Firewall}==(Configure firewall infrastructure roles)"
+  hosts: "{{ target_hosts | default('firewall')}}"
+  any_errors_fatal: true
+  gather_facts: true
+  become: true
+
+  pre_tasks:
+    - name: Template NFTables rules into string
+      ansible.builtin.set_fact:
+        nftables_rules_raw:
+          "{{ lookup('template', 'nftables/new_main.nft') }}"
+
+  tasks:
+
+    - name: Configure Netfilter Tables Firewall
+      ansible.builtin.include_role:
+        name: nftables
+
+    - name: Configure Recursive and Authoritative DNS infrastructure
+      ansible.builtin.include_role:
+        name: nameservice
+
+    - name: Configure FRR's BGP daemon
+      ansible.builtin.include_role:
+        name: routing
+
+    - name: Configure ISC's Kea DHCP Server
+      ansible.builtin.include_role:
+        name: kea-dhcp
+
+    - name: Configure the Router-Advertisement Daemon
+      ansible.builtin.include_role:
+        name: router-radvd
+
+    # ? I would not call this role "production ready"
+    # - name: Configure IPSec server infrastructure
+    #   ansible.builtin.include_role:
+    #     name: strongswan
