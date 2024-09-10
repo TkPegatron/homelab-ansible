@@ -1,0 +1,12 @@
+---
+- name: Copy certificate authority
+  ansible.builtin.copy:
+    content: "{{ item.content }}"
+    dest: /etc/pki/ca-trust/source/anchors/{{ item.name }}.crt
+    group: root
+    mode: "0644"
+    owner: root
+    validate: openssl x509 -inform PEM -in %s -noout
+  when: ("content" in item.keys())
+  with_items: "{{ certenroll_trust_anchors }}"
+  notify: Update CA Anchors

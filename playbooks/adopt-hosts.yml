@@ -1,0 +1,15 @@
+---
+- name: "Host Adoption playbook"
+  hosts: "{{ target_hosts }}"
+  gather_facts: true
+  become: true
+  tasks:
+
+
+    - name: Configures SSHd and deploys certificate trust
+      ansible.builtin.include_role:
+        name: sshd
+
+    - name: Deploy local certificate authority
+      ansible.builtin.include_role:
+        name: certenroll

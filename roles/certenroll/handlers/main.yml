@@ -1,0 +1,4 @@
+---
+- name: Update CA Anchors
+  become: true
+  ansible.builtin.command: "update-ca-trust"
