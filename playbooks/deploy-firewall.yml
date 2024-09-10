@@ -32,7 +32,47 @@
       ansible.builtin.include_role:
         name: router-radvd
 
+    - name: Configure Logrotate
+      ansible.builtin.include_role:
+        name: arillso.logrotate
+
+    - name: Configure Promtail
+      ansible.builtin.include_role:
+        name: promtail
+
     # ? I would not call this role "production ready"
     # - name: Configure IPSec server infrastructure
     #   ansible.builtin.include_role:
     #     name: strongswan
+
+    - name: Configure rsyslog to intercept nftables kernel logs
+      block:
+        - name: Deploy rsyslog configuration files
+          loop: "{{ rsyslog_rsyslog_d_files }}"
+          notify: "Restart Rsyslog"
+          ansible.builtin.copy:
+            content: "{{ item.content }}"
+            dest: /etc/rsyslog.d/{{ item.name }}.conf
+            owner: root
+            group: root
+            mode: u=rw,g=r,o=
+        - name: Append rsyslog config files to controlled_files list
+          loop: "{{ rsyslog_rsyslog_d_files }}"
+          ansible.builtin.set_fact:
+            controlled_files: "{{ (controlled_files | default([])) + ['/etc/rsyslog.d/' + item.name + '.conf'] }}"
+
+    - name: Retreive Configuration files from host for tracking
+      block:
+        - name: Fetch configuration files
+          loop: "{{ controlled_files }}"
+          when: controlled_files is defined
+          ansible.builtin.fetch:
+            fail_on_missing: false
+            src: "{{ item }}"
+            dest: /tmp/config/
+
+  handlers:
+    - name: Restart Rsyslog
+      ansible.builtin.service:
+        name: rsyslog.service
+        state: restarted
